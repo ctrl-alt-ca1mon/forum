@@ -1,7 +1,7 @@
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
 <html>
 <head>
-<title>Dial-Up Hub -- Сообщество Олдфагов</title>
+<title>Dial-Up Hub Board v2.0</title>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
 <style type="text/css">
   body {
@@ -104,47 +104,30 @@
 </head>
 <body>
 
-<!-- Твой HTML код (таблицы, кнопки, div'ы) находится выше -->
-
-    <br>
-    <center>
-      <font size="-2">Powered by Dial-Hub Board v1.0 | Tested in Internet Explorer 6.0 | 2006-2026</font>
-    </center>
+<div class="window">
+  <div class="title-bar">
+    <span>🌐 Dial-Up Hub Discussion Board (Web 1.0 Threads)</span>
+    <span>[X]</span>
   </div>
-</div>
 
-<!-- Модалка регистрации -->
-<div id="reg-modal">
-  ...
-</div>
+  <div class="content-area">
+    <table width="100%" style="margin-bottom: 10px;">
+      <tr>
+        <td>
+          <h2>💾 DIAL-UP HUB COMMUNITY FORUM</h2>
+          <i>Обсуждение ретро-софта, КПК, игр и музыки</i>
+        </td>
+        <td align="right">
+          <button class="win-btn" onclick="openRegModal()">🔑 Регистрация</button>
+        </td>
+      </tr>
+    </table>
 
-<!-- ВСЕ СКРИПТЫ ПИШУТСЯ СТРОГО ВНУТРИ ЭТОГО ТЕГА -->
-<script type="text/javascript">
+    <div class="breadcrumb" id="nav-path">
+      <a onclick="showThreadList()">Главная страница форума</a>
+    </div>
 
-  // 1. Переход на другую страницу
-  function openThreads() {
-    playSound('windows-navigation-start');
-    window.location.href = 'forum.html'; // Тут имя файла, куда ведет кнопка
-  }
-
-  // 2. Возврат к списку тредов
-  function showThreadList() {
-    playSound('windows-navigation-start');
-    activeThreadId = null;
-    document.getElementById('view-single-thread').style.display = 'none';
-    document.getElementById('view-thread-list').style.display = 'block';
-    document.getElementById('nav-path').innerHTML = '<a onclick="showThreadList()">Главная страница форума</a>';
-    renderThreads();
-  }
-
-  // 3. Остальные функции (playSound, openRegModal, addUserPost и т.д.)
-
-</script>
-
-</body>
-</html>
-
-    <!--  Список тредов -->
+    <!-- ВЬЮ 1: Список тредов -->
     <div id="view-thread-list">
       <div style="background: #E3E3E3; border: 1px solid #808080; padding: 8px; margin-bottom: 15px;">
         <b>Создать новый тред:</b><br>
@@ -164,7 +147,6 @@
           </tr>
         </thead>
         <tbody id="threads-tbody">
-          <!-- Темы будут тут -->
         </tbody>
       </table>
     </div>
@@ -181,7 +163,6 @@
           </tr>
         </thead>
         <tbody id="replies-tbody">
-          <!-- Ответы внутри треда -->
         </tbody>
       </table>
 
@@ -197,7 +178,7 @@
 
     <br>
     <center>
-      <font size="-2">Powered by Dial-Up Hub v2.0 | Tested in Internet Explorer 6.0 | 2006-2026</font>
+      <font size="-2">Powered by Dial-Up Hub Board v2.0 | Tested in Internet Explorer 6.0 | 2006-2026</font>
     </center>
   </div>
 </div>
@@ -222,14 +203,13 @@
 </div>
 
 <script type="text/javascript">
-  // Звуковая система
   function playSound(soundName) {
-    var audio = new Audio(soundName + '.mp3'); // Проигрывает wav или mp3 с GitHub
-    audio.play().catch(function(e){ console.log("Sound play error:", e); });
+    var audio = new Audio(soundName + '.mp3');
+    audio.play().catch(function(e){ console.log("Sound error:", e); });
   }
 
   function openRegModal() {
-    playSound('windows-98-error');
+    playSound('xp_error');
     document.getElementById('reg-modal').style.display = 'block';
   }
 
@@ -238,7 +218,6 @@
     document.getElementById('reg-modal').style.display = 'none';
   }
 
-  // Данные форума
   var threads = [
     {
       id: 1,
@@ -276,7 +255,9 @@
     'Норм тред, подписываюсь!',
     'У меня на стимдеке/виртуалке это тоже запускалось гыгыгы.',
     'База! Все по факту расписал.',
-    'Интересно, а под Windows Mobile это перепишут?'
+    'Интересно, а под Windows Mobile это перепишут?',
+    'А есть у кого патч или рабочий кряк под это дело?',
+    'На Windows XP Server 2003 без лагов пойдет?'
   ];
 
   function renderThreads() {
@@ -294,7 +275,7 @@
   }
 
   function openThread(id) {
-    playSound('windows-navigation-start');
+    playSound('click');
     activeThreadId = id;
     var thread = threads.find(function(t) { return t.id === id; });
 
@@ -308,7 +289,7 @@
   }
 
   function showThreadList() {
-    playSound('windows-navigation-start');
+    playSound('click');
     activeThreadId = null;
     document.getElementById('view-single-thread').style.display = 'none';
     document.getElementById('view-thread-list').style.display = 'block';
@@ -341,7 +322,7 @@
       return;
     }
 
-    playSound('windows-navigation-start');
+    playSound('click');
     var newId = threads.length + 1;
     threads.unshift({
       id: newId,
@@ -361,20 +342,19 @@
 
     if (!msg) return;
 
-    playSound('windows-navigation-start');
+    playSound('click');
     var thread = threads.find(function(t) { return t.id === activeThreadId; });
     thread.replies.push({ author: author, text: msg, isBot: false });
 
     document.getElementById('reply-msg').value = '';
     renderReplies();
 
-    // Бот отвечает через 2.5 секунды
     setTimeout(function() {
       if (activeThreadId === thread.id) {
         var randomBot = botNames[Math.floor(Math.random() * botNames.length)];
         var randomMsg = botMessages[Math.floor(Math.random() * botMessages.length)];
         thread.replies.push({ author: randomBot, text: randomMsg, isBot: true });
-        playSound('chimes');
+        playSound('xp_error');
         renderReplies();
       }
     }, 2500);
