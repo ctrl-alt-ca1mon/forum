@@ -1,7 +1,7 @@
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
 <html>
 <head>
-<title>C1H FORUM v2.0 -- Сообщество Олдфагов</title>
+<title>Dial-Up Hub -- Сообщество Олдфагов</title>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
 <style type="text/css">
   body {
@@ -106,7 +106,7 @@
 
 <div class="window">
   <div class="title-bar">
-    <span>🌐 C1H / CA1MON Discussion Board (Web 1.0 Threads Edition)</span>
+    <span>🌐 Dial-Up Discussion Board (Web 1.0 Threads Edition)</span>
     <span>[X]</span>
   </div>
 
@@ -115,7 +115,7 @@
     <table width="100%" style="margin-bottom: 10px;">
       <tr>
         <td>
-          <h2>💾 C1H COMMUNITY FORUM</h2>
+          <h2>💾 Dial-Up Hub</h2>
           <i>Обсуждение старого софта, КПК, игр и музыки</i>
         </td>
         <td align="right">
@@ -124,11 +124,27 @@
       </tr>
     </table>
 
-    <div class="breadcrumb" id="nav-path">
-      <a onclick="showThreadList()">Главная страница форума</a>
-    </div>
+    <!-- html выше -->
+<div class="breadcrumb" id="nav-path">
+  <a onclick="showThreadList()">Главная страница форума</a>
+</div>
 
-    <!-- ВЬЮ 1: Список тредов -->
+<!-- джиеска -->
+<script type="text/javascript">
+
+  function showThreadList() {
+    playSound('windows-navigation-start');
+    activeThreadId = null;
+    document.getElementById('view-single-thread').style.display = 'none';
+    document.getElementById('view-thread-list').style.display = 'block';
+    document.getElementById('nav-path').innerHTML = '<a onclick="showThreadList()">Главная страница форума</a>';
+    renderThreads();
+  }
+
+  // Остальные функции (playSound, renderThreads и т.д.)
+</script>
+
+    <!--  Список тредов -->
     <div id="view-thread-list">
       <div style="background: #E3E3E3; border: 1px solid #808080; padding: 8px; margin-bottom: 15px;">
         <b>Создать новый тред:</b><br>
@@ -181,7 +197,7 @@
 
     <br>
     <center>
-      <font size="-2">Powered by C1H Board v2.0 | Tested in Internet Explorer 6.0 | 2006-2026</font>
+      <font size="-2">Powered by Dial-Up Hub v2.0 | Tested in Internet Explorer 6.0 | 2006-2026</font>
     </center>
   </div>
 </div>
@@ -213,7 +229,7 @@
   }
 
   function openRegModal() {
-    playSound('xp_error');
+    playSound('windows-98-error');
     document.getElementById('reg-modal').style.display = 'block';
   }
 
@@ -247,6 +263,16 @@
   var activeThreadId = null;
   var botNames = ['Win98_User', 'CyberPioneer', 'Sysc1hAdmin', 'PDA_Master', 'EazyFan_99'];
   var botMessages = [
+    'А есть у кого патч или рабочий кряк под это дело?'
+    'На Windows XP Server 2003 без лагов пойдет?'
+    'Кто-нибудь пробовал это запускать через Opera Mini на КПК?'
+    'Пацаны, скиньте рабочую ссылку, а то на депосите файл удалили :('
+    'Автору респект, лови плюс в репу!'
+    'Это мы качаем! Лишь бы вирусов не было.'
+    'Народ, подскажите, а где сейчас можно нормальный кнопочник или КПК взять недорого?'
+    'О, помню в 2007-м на форумах это круглосуточно обсуждали...'
+    'А под Win98 SE нужно какие-то драйвера дополнительно ставить?'
+    'Годный контент, закинул в закладки IE.'
     'Норм тред, подписываюсь!',
     'У меня на стимдеке/виртуалке это тоже запускалось гыгыгы.',
     'База! Все по факту расписал.',
@@ -268,7 +294,7 @@
   }
 
   function openThread(id) {
-    playSound('click');
+    playSound('windows-navigation-start');
     activeThreadId = id;
     var thread = threads.find(function(t) { return t.id === id; });
 
@@ -282,7 +308,7 @@
   }
 
   function showThreadList() {
-    playSound('click');
+    playSound('windows-navigation-start');
     activeThreadId = null;
     document.getElementById('view-single-thread').style.display = 'none';
     document.getElementById('view-thread-list').style.display = 'block';
@@ -315,7 +341,7 @@
       return;
     }
 
-    playSound('click');
+    playSound('windows-navigation-start');
     var newId = threads.length + 1;
     threads.unshift({
       id: newId,
@@ -335,7 +361,7 @@
 
     if (!msg) return;
 
-    playSound('click');
+    playSound('windows-navigation-start');
     var thread = threads.find(function(t) { return t.id === activeThreadId; });
     thread.replies.push({ author: author, text: msg, isBot: false });
 
@@ -348,7 +374,7 @@
         var randomBot = botNames[Math.floor(Math.random() * botNames.length)];
         var randomMsg = botMessages[Math.floor(Math.random() * botMessages.length)];
         thread.replies.push({ author: randomBot, text: randomMsg, isBot: true });
-        playSound('xp_error');
+        playSound('chimes');
         renderReplies();
       }
     }, 2500);
