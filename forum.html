@@ -119,12 +119,12 @@
         <td>
           <h2>💾 Dial-Up Forum</h2>
           <i>Форум про ценителей старого софта, КПК и ретро-железа</i>
-        </td>
-        <td align="right">
-          <button class="win-btn" onclick="openThreads()">📂 Треды</button>
-          <button class="win-btn" onclick="openRegModal()">🔑 Регистрация</button>
-          <button class="win-btn" onclick="playSound('click')">🔔 Войти</button>
-        </td>
+          
+        <td align="right" id="auth-buttons">
+  <button class="win-btn" onclick="openThreads()">📂 Треды</button>
+  <button class="win-btn" onclick="openRegModal()">🔑 Регистрация</button>
+  <button class="win-btn" onclick="openLoginModal()">🔔 Войти</button>
+      </td>
       </tr>
     </table>
     
@@ -168,10 +168,17 @@
 </div>
 
 <!-- Модальное окно Регистрации -->
+<!-- Модальное окно Регистрации / Входа -->
 <div id="reg-modal">
-  <b style="color:#0058EE;">Привет гость!</b><br><br>
-  Спасибо что хочешь зарегаться! Форум пока что состоит из ботов но скоро будут люди. Ты можешь писать тут что угодно, но есть и правила :p<br>
+  <b style="color:#0058EE;" id="modal-title">Привет, гость!</b><br><br>
   
+  <div id="auth-form-fields">
+    Никнейм:<br>
+    <input type="text" id="auth-username" size="25" placeholder="Введите ваш ник..." style="width: 100%; margin-bottom: 8px;"><br>
+    Пароль:<br>
+    <input type="password" id="auth-password" size="25" placeholder="******" style="width: 100%; margin-bottom: 8px;"><br>
+  </div>
+
   <div class="rules-box">
     <b>ПРАВИЛА ФОРУМА:</b><br>
     1. Не спамить ссылками на шок-сайты и казино.<br>
@@ -182,7 +189,8 @@
   </div>
 
   <center>
-    <button class="win-btn" onclick="closeRegModal()">Я согласен с правилами!</button>
+    <button class="win-btn" id="modal-submit-btn" onclick="processAuth()">Принять и зарегаться!</button>
+    <button class="win-btn" onclick="closeRegModal()">Отмена</button>
   </center>
 </div>
 
@@ -214,17 +222,17 @@
   }
 
   function openThreads() {
-    playSound('click');
+    playSound('windows-navigation-start');
     window.location.href = 'index.html';
   }
 
   function openRegModal() {
-    playSound('xp');
+    playSound('ding');
     document.getElementById('reg-modal').style.display = 'block';
   }
 
   function closeRegModal() {
-    playSound('click');
+    playSound('windows-navigation-start');
     document.getElementById('reg-modal').style.display = 'none';
   }
 
@@ -259,6 +267,109 @@
     
     tbody.insertBefore(row, tbody.firstChild);
   }
+  
+  <!-- Здесь заканчивается твой HTML (например, окно регистрации или подвал форума) -->
+<div id="reg-modal">
+  ...
+</div>
+
+<!-- Если тега <script> нет, создай его прямо перед </body> -->
+<script type="text/javascript">
+
+  var authMode = 'reg';
+
+  function playWin98Sound() {
+    var audio = new Audio('welcome.mp3');
+    audio.play().catch(function(e) {
+      console.log("Звук не удалось воспроизвести:", e);
+    });
+  }
+
+  function openRegModal() {
+    authMode = 'reg';
+    playSound('ding');
+    document.getElementById('modal-title').innerText = 'Регистрация нового пользователя';
+    document.getElementById('modal-submit-btn').innerText = 'Зарегистрироваться!';
+    document.getElementById('reg-modal').style.display = 'block';
+  }
+
+  function openLoginModal() {
+    authMode = 'login';
+    playSound('windows-navigation-start');
+    document.getElementById('modal-title').innerText = 'Вход на форум';
+    document.getElementById('modal-submit-btn').innerText = 'Войти';
+    document.getElementById('reg-modal').style.display = 'block';
+  }
+
+  function closeRegModal() {
+    playSound('windows-navigation-start');
+    document.getElementById('reg-modal').style.display = 'none';
+  }
+
+  function processAuth() {
+    var usernameInput = document.getElementById('auth-username').value.trim();
+    var passwordInput = document.getElementById('auth-password').value;
+
+    if (!usernameInput) {
+      alert('Пожалуйста, введите никнейм!');
+      return;
+    }
+
+    localStorage.setItem('forum_username', usernameInput);
+    localStorage.setItem('forum_logged_in', 'true');
+
+    playWin98Sound();
+
+    document.getElementById('reg-modal').style.display = 'none';
+    checkAuthStatus();
+
+    if (authMode === 'reg') {
+      alert('Регистрация успешно завершена! Добро пожаловать, ' + usernameInput + '!');
+    } else {
+      alert('С возвращением, ' + usernameInput + '!');
+    }
+  }
+
+  function logoutUser() {
+    playSound('click');
+    localStorage.removeItem('forum_username');
+    localStorage.removeItem('forum_logged_in');
+    checkAuthStatus();
+    alert('Вы вышли из аккаунта.');
+  }
+
+  function checkAuthStatus() {
+    var loggedIn = localStorage.getItem('forum_logged_in') === 'true';
+    var currentUser = localStorage.getItem('forum_username') || 'C1h_Fan';
+
+    var userNameField = document.getElementById('user-name') || document.getElementById('new-thread-author') || document.getElementById('reply-author');
+    if (userNameField) {
+      userNameField.value = currentUser;
+    }
+
+    var authButtons = document.getElementById('auth-buttons');
+    if (authButtons) {
+      if (loggedIn) {
+        authButtons.innerHTML = 'Привет, <b>' + currentUser + '</b>! <button class="win-btn" onclick="logoutUser()">Выйти</button>';
+      } else {
+        authButtons.innerHTML = 
+          '<button class="win-btn" onclick="openRegModal()">🔑 Регистрация</button> ' +
+          '<button class="win-btn" onclick="openLoginModal()">🔔 Войти</button>';
+      }
+    }
+  }
+
+  window.onload = function() {
+    checkAuthStatus();
+    if (typeof renderThreads === 'function') {
+      renderThreads();
+    }
+  };
+
+</script>
+
+</body>
+</html>
 
   // Добавление поста пользователем
   function addUserPost() {
