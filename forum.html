@@ -371,9 +371,13 @@
 </body>
 </html>
 
-  // Добавление поста пользователем
-  function addUserPost() {
-    var name = document.getElementById('user-name').value || 'Гость';
+  <!-- Поставь этот тег прямо перед функциями -->
+<script type="text/javascript">
+
+// Добавление поста пользователем
+function addUserPost() {
+  var name = document.getElementById('user-name').value || 'Гость';
+  ...
     var title = document.getElementById('post-title').value;
     var text = document.getElementById('post-text').value;
 
