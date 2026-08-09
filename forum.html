@@ -1,0 +1,294 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+<head>
+<title>C1H FORUM v1.0 -- Сообщество Олдфагов</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<style type="text/css">
+  body {
+    background-color: #3A6EA5; /* Синий фон в стиле установочных экранов */
+    color: #000000;
+    font-family: Tahoma, Verdana, Arial, sans-serif;
+    font-size: 11px;
+    margin: 10px;
+  }
+  
+  /* Главный контейнер в стиле окна Windows XP */
+  .window {
+    background-color: #ECE9D8;
+    border: 2px solid #0055EA;
+    border-radius: 5px 5px 0 0;
+    width: 85%;
+    margin: 0 auto;
+    padding: 2px;
+    box-shadow: 4px 4px 10px rgba(0,0,0,0.5);
+  }
+
+  .title-bar {
+    background: linear-gradient(to right, #0058EE, #3793FF);
+    color: #FFFFFF;
+    font-weight: bold;
+    padding: 4px 8px;
+    font-size: 12px;
+    display: flex;
+    justify-content: space-between;
+  }
+
+  .content-area {
+    padding: 10px;
+  }
+
+  /* Таблицы форума */
+  table.forum-table {
+    width: 100%;
+    border-collapse: collapse;
+    background-color: #FFFFFF;
+    border: 1px solid #919B9C;
+  }
+
+  th {
+    background-color: #DDE4EC;
+    color: #000000;
+    border: 1px solid #919B9C;
+    padding: 5px;
+    text-align: left;
+    font-size: 11px;
+  }
+
+  td {
+    border: 1px solid #D4D0C8;
+    padding: 6px;
+    font-size: 11px;
+  }
+
+  .avatar-col { width: 100px; text-align: center; background-color: #F4F4F4; }
+  
+  /* Кнопки в стиле WinXP */
+  .win-btn {
+    background: linear-gradient(to bottom, #FFFFFF, #ECE9D8);
+    border: 1px solid #003C74;
+    padding: 3px 10px;
+    font-size: 11px;
+    cursor: pointer;
+    font-weight: bold;
+  }
+  .win-btn:active {
+    background: #DBD6C4;
+  }
+
+  a { color: #0044DD; text-decoration: underline; }
+  a:hover { color: #FF0000; }
+
+  /* Окно Регистрации (Modal) */
+  #reg-modal {
+    display: none;
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 400px;
+    background-color: #ECE9D8;
+    border: 3px double #0058EE;
+    padding: 15px;
+    box-shadow: 5px 5px 15px #000;
+    z-index: 1000;
+  }
+
+  .rules-box {
+    background: #FFF;
+    border: 1px inset #808080;
+    height: 100px;
+    overflow-y: scroll;
+    padding: 5px;
+    margin: 10px 0;
+    font-family: monospace;
+  }
+</style>
+</head>
+<body>
+
+<div class="window">
+  <div class="title-bar">
+    <span>🌐 C1H / CA1MON Discussion Board (Web 1.0 Edition)</span>
+    <span>[X]</span>
+  </div>
+
+  <div class="content-area">
+    <!-- Шапка форума -->
+    <table width="100%" style="margin-bottom: 10px;">
+      <tr>
+        <td>
+          <h2>💾 C1H COMMUNITY FORUM</h2>
+          <i>Форум про ценителей старого софта, КПК и ретро-железа</i>
+        </td>
+        <td align="right">
+          <button class="win-btn" onclick="openRegModal()">🔑 Регистрация</button>
+          <button class="win-btn" onclick="playSound('click')">🔔 Войти</button>
+        </td>
+      </tr>
+    </table>
+
+    <marquee scrollamount="3" style="background:#000080; color:#FFF; padding:2px; margin-bottom:10px;">
+      Внимание! Форум работает в тестовом режиме. Боты генерируют активность! Уважайте правила сообщества.
+    </marquee>
+
+    <!-- Блок формы добавления поста -->
+    <div style="background: #E3E3E3; border: 1px solid #808080; padding: 8px; margin-bottom: 15px;">
+      <b>Создать новую тему:</b><br>
+      Ник: <input type="text" id="user-name" value="C1h_Fan" size="15"> 
+      Тема: <input type="text" id="post-title" size="30" placeholder="Название темы...">
+      <br><br>
+      Сообщение:<br>
+      <textarea id="post-text" rows="3" style="width: 100%;"></textarea><br>
+      <button class="win-btn" onclick="addUserPost()">Отправить сообщение</button>
+    </div>
+
+    <!-- Темы и Сообщения -->
+    <table class="forum-table" id="forum-posts">
+      <thead>
+        <tr>
+          <th width="20%">Автор</th>
+          <th width="80%">Сообщение / Тема</th>
+        </tr>
+      </thead>
+      <tbody id="posts-body">
+        <!-- Посты будут загружаться сюда через JS -->
+      </tbody>
+    </table>
+
+    <br>
+    <center>
+      <font size="-2">Powered by C1H Board v1.0 | Tested in Internet Explorer 6.0 | 2006-2026</font>
+    </center>
+  </div>
+</div>
+
+<!-- Модальное окно Регистрации -->
+<div id="reg-modal">
+  <b style="color:#0058EE;">Привет гость!</b><br><br>
+  Спасибо что хочешь зарегаться! Форум пока что состоит из ботов но скоро будут люди. Ты можешь писать тут что угодно, но есть и правила :p<br>
+  
+  <div class="rules-box">
+    <b>ПРАВИЛА ФОРУМА:</b><br>
+    1. Не спамить ссылками на шок-сайты и казино.<br>
+    2. Уважать КПК на Windows CE 5.0.<br>
+    3. Не кричать КАПСОМ.<br>
+    4. Олдскул музыка — это базис.<br>
+    5. Будьте вежливы, гыгыгы!
+  </div>
+
+  <center>
+    <button class="win-btn" onclick="closeRegModal()">Я согласен с правилами!</button>
+  </center>
+</div>
+
+<script type="text/javascript">
+  // Звуковой движок (Win XP / Web Audio)
+  function playSound(type) {
+    var ctx = new (window.AudioContext || window.webkitAudioContext)();
+    var osc = ctx.createOscillator();
+    var gain = ctx.createGain();
+    osc.connect(gain);
+    gain.connect(ctx.destination);
+
+    if (type === 'xp') { // Звук ошибки/уведомления Win XP
+      osc.type = 'triangle';
+      osc.frequency.setValueAtTime(150, ctx.currentTime);
+      osc.frequency.exponentialRampToValueAtTime(600, ctx.currentTime + 0.15);
+      gain.gain.setValueAtTime(0.3, ctx.currentTime);
+      gain.gain.exponentialRampToValueAtTime(0.01, ctx.currentTime + 0.15);
+      osc.start();
+      osc.stop(ctx.currentTime + 0.15);
+    } else if (type === 'click') { // Клик браузера
+      osc.type = 'sine';
+      osc.frequency.setValueAtTime(800, ctx.currentTime);
+      gain.gain.setValueAtTime(0.1, ctx.currentTime);
+      gain.gain.exponentialRampToValueAtTime(0.01, ctx.currentTime + 0.05);
+      osc.start();
+      osc.stop(ctx.currentTime + 0.05);
+    }
+  }
+
+  function openRegModal() {
+    playSound('xp');
+    document.getElementById('reg-modal').style.display = 'block';
+  }
+
+  function closeRegModal() {
+    playSound('click');
+    document.getElementById('reg-modal').style.display = 'none';
+  }
+
+  // База ботов и их ответов
+  var botNames = ['Win98_User', 'CyberPioneer', 'Sysc1hAdmin', 'PDA_Master', 'EazyFan_99'];
+  var botMessages = [
+    'Кто-нибудь пробовал ставить Windows CE на старый КПК? Завелось?',
+    'Нашел вчера на антресолях дискету с Win95, вот это ностальгия!',
+    'Ребята, посоветуйте олдскул рэпчик начала 90-х!',
+    'Форум круто выглядит, реально как в 2004 году сижу.',
+    'Заценил био Саймона, нормальная тема :D'
+  ];
+
+  function addPostToTable(author, text, isBot) {
+    var tbody = document.getElementById('posts-body');
+    var row = document.createElement('tr');
+    
+    var time = new Date().toLocaleTimeString();
+    var avatar = isBot ? '🤖' : '👨‍💻';
+    var status = isBot ? '<font color="gray">[БОТ]</font>' : '<font color="green">[ПОЛЬЗОВАТЕЛЬ]</font>';
+
+    row.innerHTML = 
+      '<td class="avatar-col">' +
+        '<b>' + author + '</b><br>' +
+        avatar + '<br>' +
+        status +
+      '</td>' +
+      '<td>' +
+        '<font size="-2" color="gray">Опубликовано: ' + time + '</font><hr size="1" color="#E0E0E0">' +
+        text +
+      '</td>';
+    
+    tbody.insertBefore(row, tbody.firstChild);
+  }
+
+  // Добавление поста пользователем
+  function addUserPost() {
+    var name = document.getElementById('user-name').value || 'Гость';
+    var title = document.getElementById('post-title').value;
+    var text = document.getElementById('post-text').value;
+
+    if (!text) {
+      alert('Введите текст сообщения!');
+      return;
+    }
+
+    playSound('click');
+    var fullText = title ? '<b>Тема: ' + title + '</b><br>' + text : text;
+    addPostToTable(name, fullText, false);
+
+    document.getElementById('post-text').value = '';
+    document.getElementById('post-title').value = '';
+
+    // Бот отвечает через 3 секунды
+    setTimeout(triggerBotResponse, 3000);
+  }
+
+  // Генерация сообщений от ботов
+  function triggerBotResponse() {
+    var randomBot = botNames[Math.floor(Math.random() * botNames.length)];
+    var randomMsg = botMessages[Math.floor(Math.random() * botMessages.length)];
+    playSound('xp');
+    addPostToTable(randomBot, randomMsg, true);
+  }
+
+  // Запуск стартовых постов
+  window.onload = function() {
+    addPostToTable('Admin_c1h', 'Привет всем! Это мой новый форум. Пишите, не стесняйтесь!', false);
+    addPostToTable('Win98_User', 'Первый нах! Форум работает!', true);
+    
+    // Бот автоматически пишет каждые 20 секунд для симуляции актива
+    setInterval(triggerBotResponse, 20000);
+  };
+</script>
+
+</body>
+</html>
