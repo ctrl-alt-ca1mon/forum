@@ -104,34 +104,30 @@
 </head>
 <body>
 
-<div class="window">
-  <div class="title-bar">
-    <span>🌐 Dial-Up Discussion Board (Web 1.0 Threads Edition)</span>
-    <span>[X]</span>
+<!-- Твой HTML код (таблицы, кнопки, div'ы) находится выше -->
+
+    <br>
+    <center>
+      <font size="-2">Powered by Dial-Hub Board v1.0 | Tested in Internet Explorer 6.0 | 2006-2026</font>
+    </center>
   </div>
-
-  <div class="content-area">
-    <!-- Панель управления -->
-    <table width="100%" style="margin-bottom: 10px;">
-      <tr>
-        <td>
-          <h2>💾 Dial-Up Hub</h2>
-          <i>Обсуждение старого софта, КПК, игр и музыки</i>
-        </td>
-        <td align="right">
-          <button class="win-btn" onclick="openRegModal()">🔑 Регистрация</button>
-        </td>
-      </tr>
-    </table>
-
-    <!-- html выше -->
-<div class="breadcrumb" id="nav-path">
-  <a onclick="showThreadList()">Главная страница форума</a>
 </div>
 
-<!-- джиеска -->
+<!-- Модалка регистрации -->
+<div id="reg-modal">
+  ...
+</div>
+
+<!-- ВСЕ СКРИПТЫ ПИШУТСЯ СТРОГО ВНУТРИ ЭТОГО ТЕГА -->
 <script type="text/javascript">
 
+  // 1. Переход на другую страницу
+  function openThreads() {
+    playSound('windows-navigation-start');
+    window.location.href = 'forum.html'; // Тут имя файла, куда ведет кнопка
+  }
+
+  // 2. Возврат к списку тредов
   function showThreadList() {
     playSound('windows-navigation-start');
     activeThreadId = null;
@@ -141,8 +137,12 @@
     renderThreads();
   }
 
-  // Остальные функции (playSound, renderThreads и т.д.)
+  // 3. Остальные функции (playSound, openRegModal, addUserPost и т.д.)
+
 </script>
+
+</body>
+</html>
 
     <!--  Список тредов -->
     <div id="view-thread-list">
